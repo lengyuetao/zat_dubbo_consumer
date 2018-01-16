@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -24,7 +25,8 @@ public class IndexController {
 
     @RequestMapping(value="/send",method = RequestMethod.GET)
     public String send(){
-        String message="消息中间件："+new Date();
+        SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd HH:dd:ss:SSS");
+        String message="消息中间件："+sf.format(new Date());
         rmqProducer.send(message,"test");
         System.out.println("****");
 

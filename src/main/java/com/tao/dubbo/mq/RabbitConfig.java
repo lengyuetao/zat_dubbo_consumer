@@ -17,6 +17,8 @@ import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.UnsupportedEncodingException;
+
 @Configuration
 public class RabbitConfig {
 	//队列
@@ -77,7 +79,13 @@ public class RabbitConfig {
         container.setMessageListener(new MessageListener() {
             @Override
             public void onMessage(Message message) {
-                System.out.println(message.getBody());
+                String msg= null;
+                try {
+                    msg = new String(message.getBody(),"utf-8");
+                    System.out.println(msg);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
