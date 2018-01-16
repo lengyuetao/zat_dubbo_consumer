@@ -10,10 +10,8 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,8 +27,6 @@ public class RabbitConfig {
 	private String host="123.207.220.205";
 	//交换机
 	private String exchange="direct";
-	//路由
-	private String routingKey="";
 
 	private boolean durable=true;
 	private boolean exclusive=false;
@@ -62,8 +58,8 @@ public class RabbitConfig {
 	@Bean
     public RabbitTemplate getRabbitTemplate(){
     	RabbitTemplate template=new RabbitTemplate(connectionFactory());
-    	//template.setExchange(this.exchange);
-//    	template.setRoutingKey(this.mqQueue);
+    	template.setExchange(this.exchange);
+    	template.setRoutingKey(this.mqQueue);
     	template.setQueue(this.mqQueue);
     	template.setMessageConverter(integrationEventMessageConverter());
     	return template;
