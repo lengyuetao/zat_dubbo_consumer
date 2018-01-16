@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.3.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache-4.3.xsd http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+   <!--
+    <bean id="propertyPlaceholderConfigurer"  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/rabbit.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="connectionFactory"
+          class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <property name="username" value="${mq.user}" />
+        <property name="password" value="${mq.pwd}" />
+        <property name="host" value="${mq.address}" />
+        <property name="port" value="${mq.port}" />
+    </bean>
+
+    <bean id="rabbitAdmin" class="org.springframework.amqp.rabbit.core.RabbitAdmin">
+        <constructor-arg ref="connectionFactory" />
+    </bean>
+
+    <bean id="serializerMessageConverter"
+          class="org.springframework.amqp.support.converter.SimpleMessageConverter" />
+
+    <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
+        <constructor-arg ref="connectionFactory" />
+        <property name="queue" value="${mq.queue}" />
+        <property name="messageConverter" ref="serializerMessageConverter" />
+    </bean>
+
+    <bean id="queue" class="org.springframework.amqp.core.Queue">
+        <constructor-arg index="0" value="${mq.queue}"></constructor-arg>
+        <constructor-arg index="1" value="true"></constructor-arg>
+        <constructor-arg index="2" value="false"></constructor-arg>
+        <constructor-arg index="3" value="false"></constructor-arg>
+    </bean>
+
+    <bean id="rmqConsumer" class="com.tao.dubbo.mq.RmqConsumer" />
+    <bean id="messageListenerAdapter"
+          class="org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter">
+        <constructor-arg ref="rmqConsumer" />
+        <property name="defaultListenerMethod" value="rmqConsumeMessage"></property>
+        <property name="messageConverter" ref="serializerMessageConverter"></property>
+    </bean>
+
+    <bean id="listenerContainer"
+          class="org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer">
+        <property name="queues" ref="queue"></property>
+        <property name="connectionFactory" ref="connectionFactory"></property>
+        <property name="messageListener" ref="messageListenerAdapter"></property>
+    </bean>
+    -->
+</beans>
