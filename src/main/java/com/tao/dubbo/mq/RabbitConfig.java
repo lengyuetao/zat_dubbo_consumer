@@ -25,6 +25,8 @@ public class RabbitConfig {
 	private String userName="guest";
 	private String password="guest";
 	private String host="123.207.220.205";
+	//虚拟主机，默认/
+	private String vhost="/";
 	//交换机
 	private String exchange="direct";
 
@@ -39,6 +41,7 @@ public class RabbitConfig {
       connectionFactory.setUsername(this.userName);
       connectionFactory.setPassword(this.password);
       connectionFactory.setPort(AMQP.PROTOCOL.PORT);
+      connectionFactory.setVirtualHost(this.vhost);
       return connectionFactory;
     }
     //创建代理类
@@ -58,7 +61,7 @@ public class RabbitConfig {
 	@Bean
     public RabbitTemplate getRabbitTemplate(){
     	RabbitTemplate template=new RabbitTemplate(connectionFactory());
-    	template.setExchange(this.exchange);
+    	//template.setExchange(this.exchange);
     	template.setRoutingKey(this.mqQueue);
     	template.setQueue(this.mqQueue);
     	template.setMessageConverter(integrationEventMessageConverter());
@@ -78,7 +81,8 @@ public class RabbitConfig {
                 String msg= null;
                 try {
                     msg = new String(message.getBody(),"utf-8");
-                    System.out.println(msg);
+                    System.out.println("队列名称："+message.getMessageProperties().getConsumerQueue()+msg);
+                    System.out.println("--------消息体："+message);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
