@@ -1,20 +1,20 @@
 package com.tao.dubbo.mq;
 
 import com.rabbitmq.client.AMQP;
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageListener;
-import org.springframework.amqp.core.Queue;
+import com.rabbitmq.client.Channel;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 @Configuration
@@ -42,8 +42,11 @@ public class RabbitConfig {
       connectionFactory.setPassword(this.password);
       connectionFactory.setPort(AMQP.PROTOCOL.PORT);
       connectionFactory.setVirtualHost(this.vhost);
+//      connectionFactory.setChannelCacheSize(25);
       return connectionFactory;
     }
+
+
     //创建代理类
 	@Bean
     public AmqpAdmin amqpAdmin() {
@@ -52,9 +55,9 @@ public class RabbitConfig {
 
     public MessageConverter integrationEventMessageConverter() {
         Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();
+
         return messageConverter;
     }
-
 
 
     //创建消息模板
@@ -75,15 +78,19 @@ public class RabbitConfig {
 		container.setConnectionFactory(connectionFactory());
         container.setQueueNames(this.mqQueue);
         container.setMessageConverter(integrationEventMessageConverter());
-        container.setMessageListener(new MessageListener() {
-            @Override
-            public void onMessage(Message message) {
+        container.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        container.setMessageListener(new MessageListenerAdapter() {
+
+            public void onMessage(Message message, Channel channel) {
                 String msg= null;
                 try {
                     msg = new String(message.getBody(),"utf-8");
                     System.out.println("队列名称："+message.getMessageProperties().getConsumerQueue()+msg);
                     System.out.println("--------消息体："+message);
+                    channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
                 } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
