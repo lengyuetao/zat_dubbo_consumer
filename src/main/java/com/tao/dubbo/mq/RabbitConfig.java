@@ -65,8 +65,8 @@ public class RabbitConfig {
     public RabbitTemplate getRabbitTemplate(){
     	RabbitTemplate template=new RabbitTemplate(connectionFactory());
     	//template.setExchange(this.exchange);
-    	template.setRoutingKey(this.mqQueue);
-    	template.setQueue(this.mqQueue);
+//    	template.setRoutingKey(this.mqQueue);
+//    	template.setQueue(this.mqQueue);
     	template.setMessageConverter(integrationEventMessageConverter());
     	return template;
     }
